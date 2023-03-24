@@ -1,2 +1,2 @@
 # iOS Components Programmatically
-Swift 4.2 ile iOS Componentlerinin Kod ile kullanımının anlatıldığı bir projedir.
+It is a project that explains the use of iOS Components with Code with Swift 4.2.
