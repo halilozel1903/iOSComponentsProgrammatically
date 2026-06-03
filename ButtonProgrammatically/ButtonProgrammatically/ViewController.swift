@@ -3,32 +3,51 @@
 //  ButtonProgrammatically
 //
 //  Created by Halil Özel on 16.11.2018.
-//  Copyright © 2018 Halil Özel. All rights reserved.
+//  Modernized for programmatic UIKit examples.
 //
 
 import UIKit
 
-class ViewController: UIViewController {
-    
-    var myButton : UIButton! // button nesnesi
-    
+final class ViewController: UIViewController {
+    private let actionButton: UIButton = {
+        var configuration = UIButton.Configuration.filled()
+        configuration.title = "TurkishKit"
+        configuration.subtitle = "Programmatic Button"
+        configuration.baseBackgroundColor = .systemBlue
+        configuration.baseForegroundColor = .white
+        configuration.cornerStyle = .large
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 18, leading: 28, bottom: 18, trailing: 28)
+
+        let button = UIButton(configuration: configuration)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        return button
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        myButton = UIButton(type: .system) // button tipi
-        myButton.frame = CGRect(x: 45, y: 300, width: 280, height: 140) // boyutları
-        myButton.center = self.view.center // hizalanması
-        myButton.setTitle("TurkishKit", for: .normal) // başlık içeriği
-        myButton.setTitleColor(UIColor.red, for: .normal)  // başlığın rengi
-        view.addSubview(myButton) // button ekleme
-        
-       
-        
-        
-        
-        
-        
+        view.backgroundColor = .systemBackground
+        setupLayout()
+        setupActions()
     }
-    
-    
+
+    private func setupLayout() {
+        view.addSubview(actionButton)
+
+        NSLayoutConstraint.activate([
+            actionButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            actionButton.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            actionButton.leadingAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 24),
+            actionButton.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -24)
+        ])
+    }
+
+    private func setupActions() {
+        actionButton.addTarget(self, action: #selector(didTapActionButton), for: .touchUpInside)
+    }
+
+    @objc private func didTapActionButton() {
+        actionButton.configuration?.title = "Tapped!"
+    }
 }
