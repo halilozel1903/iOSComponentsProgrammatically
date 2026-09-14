@@ -64,11 +64,18 @@ final class LabelViewController: UIViewController {
         view.addSubview(contentStackView)
 
         let layoutGuide = view.safeAreaLayoutGuide
+        let readableWidth = contentStackView.widthAnchor.constraint(equalToConstant: 480)
+        readableWidth.priority = .defaultHigh
+
         NSLayoutConstraint.activate([
+            contentStackView.centerXAnchor.constraint(equalTo: layoutGuide.centerXAnchor),
             contentStackView.centerYAnchor.constraint(equalTo: layoutGuide.centerYAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: layoutGuide.leadingAnchor, constant: 24),
-            contentStackView.trailingAnchor.constraint(equalTo: layoutGuide.trailingAnchor, constant: -24),
-            contentStackView.widthAnchor.constraint(lessThanOrEqualToConstant: 480)
+            contentStackView.leadingAnchor.constraint(greaterThanOrEqualTo: layoutGuide.leadingAnchor, constant: 24),
+            contentStackView.trailingAnchor.constraint(lessThanOrEqualTo: layoutGuide.trailingAnchor, constant: -24),
+            readableWidth,
+            // The stack is centre aligned, so the wrapping labels need an explicit width.
+            headlineLabel.widthAnchor.constraint(equalTo: contentStackView.widthAnchor),
+            bodyLabel.widthAnchor.constraint(equalTo: contentStackView.widthAnchor)
         ])
     }
 
