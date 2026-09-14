@@ -88,8 +88,10 @@ xcodebuild build \
 ### Linting and formatting
 
 ```bash
-swiftlint lint          # rules in .swiftlint.yml
-swift format lint -r .  # style in .swift-format
+swiftlint lint  # rules in .swiftlint.yml
+
+# style in .swift-format
+swift format lint --recursive --strict LabelProgrammatically ButtonProgrammatically
 ```
 
 ## Project structure
