@@ -106,13 +106,20 @@ for example in ComponentsCatalog LabelProgrammatically ButtonProgrammatically; d
 done
 ```
 
-Run catalog unit tests:
+Run catalog unit tests locally (GitHub Actions compiles the test target with `build-for-testing` because hosted runners do not ship iOS Simulator runtimes by default):
 
 ```bash
-xcodebuild test \
+xcodebuild build-for-testing \
   -project ComponentsCatalog/ComponentsCatalog.xcodeproj \
   -scheme ComponentsCatalog \
   -destination 'generic/platform=iOS Simulator' \
+  CODE_SIGNING_ALLOWED=NO
+
+# On a Mac with simulators installed, execute tests with:
+xcodebuild test \
+  -project ComponentsCatalog/ComponentsCatalog.xcodeproj \
+  -scheme ComponentsCatalog \
+  -destination 'platform=iOS Simulator,name=iPhone 16' \
   CODE_SIGNING_ALLOWED=NO
 ```
 
