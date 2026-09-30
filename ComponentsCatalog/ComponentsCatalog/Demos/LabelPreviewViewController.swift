@@ -37,7 +37,6 @@ final class LabelPreviewViewController: UIViewController {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
-        label.attributedText = NSAttributedString(Self.makeBodyText())
         return label
     }()
 
@@ -52,6 +51,8 @@ final class LabelPreviewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        bodyLabel.attributedText = NSAttributedString(Self.makeBodyText())
+        bodyLabel.accessibilityLabel = "Description of programmatic label setup"
         DemoLayout.install(stackView, in: view)
     }
 
