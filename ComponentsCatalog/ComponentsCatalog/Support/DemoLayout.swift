@@ -6,6 +6,7 @@
 import UIKit
 
 enum DemoLayout {
+    @MainActor
     static func install(_ stackView: UIStackView, in view: UIView) {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stackView)
