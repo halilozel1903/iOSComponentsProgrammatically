@@ -1,8 +1,8 @@
 <h1 align="center">iOS Components Programmatically</h1>
 
 <p align="center">
-  Small, focused UIKit sample apps that build their user interface entirely in code —
-  no storyboards, no XIBs, no <code>frame</code> math.
+  UIKit sample apps that build their entire interface in Swift — no storyboards, no XIBs,
+  and no manual <code>frame</code> layout.
 </p>
 
 <p align="center">
@@ -10,7 +10,7 @@
   <a href="#requirements"><img alt="Xcode" src="https://img.shields.io/badge/Xcode-26-1575F9?logo=xcode&logoColor=white"></a>
   <a href="#requirements"><img alt="Platform" src="https://img.shields.io/badge/iOS-18.0%2B-000000?logo=apple&logoColor=white"></a>
   <a href="#project-structure"><img alt="UI" src="https://img.shields.io/badge/UI-UIKit%20(programmatic)-2396F3"></a>
-  <a href=".github/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white"></a>
+  <a href=".github/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/halilozel1903/ioscomponentsprogrammatically/ci.yml?branch=master&label=CI&logo=githubactions&logoColor=white"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/License-MIT-green"></a>
 </p>
 
@@ -18,32 +18,48 @@
 
 ## Overview
 
-This repository is a teaching resource for developers who want to learn how to build UIKit
-interfaces without Interface Builder. Each example is a standalone Xcode project that creates,
-configures and lays out a single UIKit component in Swift, using the APIs that ship with the
-current iOS SDK: `UIButton.Configuration`, `UIAction`, `AttributedString`, Auto Layout anchors,
-Dynamic Type, dark mode aware system colors and the scene based app lifecycle.
+This repository teaches **programmatic UIKit**: creating views in Swift, composing them with
+Auto Layout and `UIStackView`, and applying modern APIs such as `UIButton.Configuration`,
+`UIAction`, `AttributedString`, Dynamic Type, semantic system colors, haptics, and the
+scene-based app lifecycle.
 
-Everything is deliberately small so that the interesting part — the component setup — stays
-readable.
+Each standalone Xcode project focuses on one component family. The **`ComponentsCatalog`**
+app adds a searchable index that links every demo in a single navigation stack — a practical
+pattern for sample apps and internal design systems.
+
+## Features
+
+- **Programmatic UI only** — launch screens and scene manifests come from build settings; view
+  controllers own the full hierarchy.
+- **Swift 6 language mode** — strict concurrency with default `MainActor` isolation for UI code.
+- **Accessibility & Dynamic Type** — preferred fonts, adjustable metrics, VoiceOver labels and
+  hints on interactive controls.
+- **Dark Mode** — semantic `UIColor` tokens (`.label`, `.systemBackground`, `.secondaryLabel`).
+- **Haptics** — selection and impact feedback on catalog navigation and button demos.
+- **Catalog app** — grouped table index with search, plus embedded demos for switches, sliders,
+  segmented controls, progress views, and text fields.
+- **Automated checks** — GitHub Actions builds all targets, runs catalog unit tests, SwiftLint,
+  and `swift-format`.
 
 ## Examples
 
-| Example | What it demonstrates |
+| Project | What it demonstrates |
 | --- | --- |
-| [`LabelProgrammatically`](LabelProgrammatically) | Creating `UILabel`s in code, Dynamic Type with `adjustsFontForContentSizeCategory`, multiline text, rich text with `AttributedString`, and a reusable `InsetLabel` subclass that adds padding while respecting right-to-left layouts. |
-| [`ButtonProgrammatically`](ButtonProgrammatically) | Modern `UIButton` setup with `UIButton.Configuration`, `UIAction` handlers instead of `#selector`, a `configurationUpdateHandler` that renders state (including the built-in activity indicator), an `async` task driven from a tap, and a pull-down `UIMenu` with single selection. |
+| [`ComponentsCatalog`](ComponentsCatalog) | Searchable component index, navigation stack, haptics, and seven focused UIKit demos in one app. |
+| [`LabelProgrammatically`](LabelProgrammatically) | `UILabel` styling, multiline text, `AttributedString`, Dynamic Type, and a reusable `InsetLabel` with directional padding. |
+| [`ButtonProgrammatically`](ButtonProgrammatically) | `UIButton.Configuration`, `UIAction`, async work with configuration updates, `UIMenu` accent picking, and light haptic feedback. |
 
-### Highlights
+### Catalog demos (inside `ComponentsCatalog`)
 
-- **Programmatic only.** No storyboards or XIBs: the launch screen and the scene manifest are
-  generated from build settings, and each scene builds its own window and root view controller.
-- **Auto Layout everywhere.** Views are positioned with layout anchors against
-  `safeAreaLayoutGuide` and composed with `UIStackView`.
-- **Swift 6 language mode.** Strict concurrency checking is enabled, with `MainActor` as the
-  default actor isolation, so UI state is data-race safe by construction.
-- **Accessible by default.** System colors for light/dark mode, Dynamic Type support and SF
-  Symbols throughout.
+| Screen | APIs highlighted |
+| --- | --- |
+| UILabel preview | `AttributedString`, inset labels, header traits |
+| UIButton preview | Configurations, menus, impact haptics |
+| UISwitch | `UIAction` on `.valueChanged`, success haptics |
+| UISlider | Live value labels with Dynamic Type |
+| UISegmentedControl | Single selection and semantic tint |
+| UIProgressView | Async simulated upload with determinate progress |
+| UITextField | Borderless fields, validation copy, keyboard types |
 
 ## Requirements
 
@@ -63,76 +79,95 @@ git clone https://github.com/halilozel1903/ioscomponentsprogrammatically.git
 cd ioscomponentsprogrammatically
 ```
 
-Open the example you are interested in:
+Open the sample you want to explore:
 
 ```bash
-open LabelProgrammatically/LabelProgrammatically.xcodeproj
+open ComponentsCatalog/ComponentsCatalog.xcodeproj
 # or
+open LabelProgrammatically/LabelProgrammatically.xcodeproj
 open ButtonProgrammatically/ButtonProgrammatically.xcodeproj
 ```
 
 Select an iOS simulator and press <kbd>⌘</kbd> + <kbd>R</kbd>.
 
+> Tip: start with **ComponentsCatalog** to browse every demo from one entry point.
+
 ### Building from the command line
 
-Both projects ship a shared scheme, so they build without opening Xcode:
+Shared schemes allow simulator builds without opening Xcode:
 
 ```bash
-xcodebuild build \
-  -project LabelProgrammatically/LabelProgrammatically.xcodeproj \
-  -scheme LabelProgrammatically \
-  -destination 'generic/platform=iOS Simulator' \
+for example in ComponentsCatalog LabelProgrammatically ButtonProgrammatically; do
+  xcodebuild build \
+    -project "$example/$example.xcodeproj" \
+    -scheme "$example" \
+    -destination 'generic/platform=iOS Simulator' \
+    CODE_SIGNING_ALLOWED=NO
+done
+```
+
+Run catalog unit tests:
+
+```bash
+xcodebuild test \
+  -project ComponentsCatalog/ComponentsCatalog.xcodeproj \
+  -scheme ComponentsCatalog \
+  -destination 'platform=iOS Simulator,name=iPhone 16' \
   CODE_SIGNING_ALLOWED=NO
 ```
 
 ### Linting and formatting
 
 ```bash
-swiftlint lint  # rules in .swiftlint.yml
+swiftlint lint
 
-# style in .swift-format
-swift format lint --recursive --strict LabelProgrammatically ButtonProgrammatically
+swift format lint --recursive --strict LabelProgrammatically ButtonProgrammatically ComponentsCatalog
 ```
 
 ## Project structure
 
 ```text
 .
+├── ComponentsCatalog/
+│   ├── ComponentsCatalog.xcodeproj
+│   ├── ComponentsCatalog/                 # App sources (file-system synchronized)
+│   │   ├── ComponentIndexViewController.swift
+│   │   ├── Models/
+│   │   ├── Support/
+│   │   └── Demos/
+│   └── ComponentsCatalogTests/            # XCTest target
 ├── ButtonProgrammatically/
 │   ├── ButtonProgrammatically.xcodeproj
 │   └── ButtonProgrammatically/
-│       ├── AppDelegate.swift            # @main entry point, scene configuration
-│       ├── SceneDelegate.swift          # builds the window and root view controller
-│       ├── ButtonViewController.swift   # UIButton.Configuration, UIAction, UIMenu, async work
-│       └── Assets.xcassets
 ├── LabelProgrammatically/
 │   ├── LabelProgrammatically.xcodeproj
 │   └── LabelProgrammatically/
-│       ├── AppDelegate.swift
-│       ├── SceneDelegate.swift
-│       ├── LabelViewController.swift    # UILabel styling, AttributedString, stack layout
-│       ├── InsetLabel.swift             # UILabel subclass with content insets
-│       └── Assets.xcassets
-├── .github/workflows/ci.yml             # builds both examples and runs SwiftLint
+├── .github/workflows/ci.yml
 ├── .swiftlint.yml
 └── .swift-format
 ```
 
-Both app targets use Xcode's file system synchronized groups, so files added to a target's folder
-are picked up automatically without editing the project file.
+App targets use Xcode file-system synchronized groups, so Swift files added under a target
+folder are picked up automatically.
+
+## Roadmap
+
+- [ ] `UITextView` and `UISearchBar` demos with compositional layout helpers
+- [ ] `UIControl` subclass example with custom configuration
+- [ ] Snapshot tests for catalog cells in light and dark appearance
+- [ ] SwiftUI preview-style hosting for selected UIKit demos (where useful for teaching)
 
 ## Contributing
 
-Contributions are welcome. A good pull request:
+Contributions are welcome. Please:
 
-1. Targets the `master` branch and keeps each example self-contained.
-2. Builds cleanly for the iOS Simulator with no new warnings.
-3. Passes `swiftlint lint`.
-4. Uses small, focused commits with conventional subjects (`feat:`, `fix:`, `chore:`, `docs:`).
+1. Branch from `master` and keep each example self-contained.
+2. Ensure simulator builds succeed without new warnings.
+3. Run `swiftlint lint` and `swift format lint --recursive --strict …` on touched folders.
+4. Use small, conventional commits (`feat:`, `fix:`, `test:`, `docs:`, `chore:`).
 
-If you would like to add a new component example, follow the existing layout: one Xcode project
-per component, an `AppDelegate`/`SceneDelegate` pair, and a single view controller that shows the
-component being built in code.
+New component examples should follow the existing layout: one Xcode project per focused sample,
+or an additional screen inside `ComponentsCatalog` with accessibility labels and Dynamic Type.
 
 ## License
 
