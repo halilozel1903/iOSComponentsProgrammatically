@@ -43,19 +43,16 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Install iOS Simulator runtime
+        run: xcodebuild -downloadPlatform iOS
+
       - name: Run unit tests
         run: |
-          destination=$(xcodebuild -showdestinations -project ComponentsCatalog/ComponentsCatalog.xcodeproj -scheme ComponentsCatalog 2>/dev/null | awk -F'[ ,]' '/platform:iOS Simulator/ && /name:iPhone/ {print $0; exit}' | sed -n 's/.*id:\([^,}]*\).*/platform=iOS Simulator,id=\1/p')
-          if [ -z "$destination" ]; then
-            echo "No iPhone simulator found"
-            xcodebuild -showdestinations -project ComponentsCatalog/ComponentsCatalog.xcodeproj -scheme ComponentsCatalog
-            exit 1
-          fi
           xcodebuild test \
             -project ComponentsCatalog/ComponentsCatalog.xcodeproj \
             -scheme ComponentsCatalog \
             -configuration Debug \
-            -destination "$destination" \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
             CODE_SIGNING_ALLOWED=NO
 
   lint:
