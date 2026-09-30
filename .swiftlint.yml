@@ -1,6 +1,7 @@
 included:
   - ButtonProgrammatically
   - LabelProgrammatically
+  - ComponentsCatalog
 
 excluded:
   - "**/build"
