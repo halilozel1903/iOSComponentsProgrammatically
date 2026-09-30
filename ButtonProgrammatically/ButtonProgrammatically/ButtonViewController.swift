@@ -26,10 +26,13 @@ final class ButtonViewController: UIViewController {
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 24, bottom: 16, trailing: 24)
 
         let action = UIAction { [weak self] _ in
+            HapticFeedback.lightImpact()
             self?.runShortTask()
         }
         let button = UIButton(configuration: configuration, primaryAction: action)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.accessibilityLabel = "Primary action button"
+        button.accessibilityHint = "Runs a short async task and updates the title"
         button.configurationUpdateHandler = { [weak self] button in
             guard let self else { return }
             var updated = button.configuration
@@ -52,6 +55,7 @@ final class ButtonViewController: UIViewController {
         let button = UIButton(configuration: configuration)
         button.showsMenuAsPrimaryAction = true
         button.changesSelectionAsPrimaryAction = true
+        button.accessibilityLabel = "Accent color menu"
         button.menu = makeAccentMenu()
         return button
     }()
@@ -110,6 +114,7 @@ final class ButtonViewController: UIViewController {
 
         let actions = accents.enumerated().map { index, accent in
             UIAction(title: accent.name, state: index == 0 ? .on : .off) { [weak self] _ in
+                HapticFeedback.selectionChanged()
                 self?.applyAccent(accent.color)
             }
         }
