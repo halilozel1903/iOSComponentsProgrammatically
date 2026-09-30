@@ -45,11 +45,17 @@ jobs:
 
       - name: Run unit tests
         run: |
+          destination=$(xcodebuild -showdestinations -project ComponentsCatalog/ComponentsCatalog.xcodeproj -scheme ComponentsCatalog 2>/dev/null | awk -F'[ ,]' '/platform:iOS Simulator/ && /name:iPhone/ {print $0; exit}' | sed -n 's/.*id:\([^,}]*\).*/platform=iOS Simulator,id=\1/p')
+          if [ -z "$destination" ]; then
+            echo "No iPhone simulator found"
+            xcodebuild -showdestinations -project ComponentsCatalog/ComponentsCatalog.xcodeproj -scheme ComponentsCatalog
+            exit 1
+          fi
           xcodebuild test \
             -project ComponentsCatalog/ComponentsCatalog.xcodeproj \
             -scheme ComponentsCatalog \
             -configuration Debug \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination "$destination" \
             CODE_SIGNING_ALLOWED=NO
 
   lint:
