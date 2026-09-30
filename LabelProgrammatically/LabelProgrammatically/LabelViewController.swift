@@ -18,6 +18,7 @@ final class LabelViewController: UIViewController {
         label.textColor = .label
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.accessibilityTraits = .header
         return label
     }()
 
@@ -32,6 +33,7 @@ final class LabelViewController: UIViewController {
         label.layer.cornerRadius = 12
         label.layer.cornerCurve = .continuous
         label.layer.masksToBounds = true
+        label.accessibilityLabel = "UIKit badge"
         return label
     }()
 
@@ -42,6 +44,7 @@ final class LabelViewController: UIViewController {
         label.textAlignment = .center
         label.lineBreakMode = .byWordWrapping
         label.attributedText = NSAttributedString(LabelViewController.makeBodyText())
+        label.accessibilityLabel = "Description of programmatic label setup"
         return label
     }()
 
