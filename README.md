@@ -112,7 +112,7 @@ Run catalog unit tests:
 xcodebuild test \
   -project ComponentsCatalog/ComponentsCatalog.xcodeproj \
   -scheme ComponentsCatalog \
-  -destination 'platform=iOS Simulator,name=iPhone 16' \
+  -destination 'generic/platform=iOS Simulator' \
   CODE_SIGNING_ALLOWED=NO
 ```
 
