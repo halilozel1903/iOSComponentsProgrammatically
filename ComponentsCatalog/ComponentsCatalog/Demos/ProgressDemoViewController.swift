@@ -56,7 +56,7 @@ final class ProgressDemoViewController: UIViewController {
         progressTask = Task { [weak self] in
             guard let self else { return }
 
-            for step in 1 ... 10 {
+            for step in 1...10 {
                 try? await Task.sleep(for: .milliseconds(200))
                 guard !Task.isCancelled else { return }
                 let progress = Float(step) / 10
