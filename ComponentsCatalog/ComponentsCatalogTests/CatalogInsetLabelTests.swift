@@ -11,7 +11,7 @@ final class CatalogInsetLabelTests: XCTestCase {
     func testIntrinsicContentSizeIncludesInsets() {
         let label = CatalogInsetLabel()
         label.text = "Hi"
-        label.font = UIFont.systemFont(ofSize: 17)
+        label.font = UIFont.preferredFont(forTextStyle: .body)
         label.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8)
 
         let baseSize = label.sizeThatFits(CGSize(width: 300, height: CGFloat.greatestFiniteMagnitude))
