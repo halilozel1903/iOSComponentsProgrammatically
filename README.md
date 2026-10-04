@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <a href="#requirements"><img alt="Swift" src="https://img.shields.io/badge/Swift-6.2-F05138?logo=swift&logoColor=white"></a>
+  <a href="#requirements"><img alt="Swift" src="https://img.shields.io/badge/Swift-6.3-F05138?logo=swift&logoColor=white"></a>
   <a href="#requirements"><img alt="Xcode" src="https://img.shields.io/badge/Xcode-26.6-1575F9?logo=xcode&logoColor=white"></a>
   <a href="#requirements"><img alt="Platform" src="https://img.shields.io/badge/iOS-26.0%2B-000000?logo=apple&logoColor=white"></a>
   <a href="#project-structure"><img alt="UI" src="https://img.shields.io/badge/UI-UIKit%20(programmatic)-2396F3"></a>
@@ -31,7 +31,7 @@ pattern for sample apps and internal design systems.
 
 - **Programmatic UI only** — launch screens and scene manifests come from build settings; view
   controllers own the full hierarchy.
-- **Swift 6 language mode** — Xcode 26's Swift 6.2 toolchain with strict concurrency and default `MainActor` isolation for UI code.
+- **Swift 6 language mode** — Swift 6.3 toolchain (Xcode 26.6) with strict concurrency and default `MainActor` isolation for UI code.
 - **Accessibility & Dynamic Type** — preferred fonts, adjustable metrics, VoiceOver labels and
   hints on interactive controls.
 - **Dark Mode** — semantic `UIColor` tokens (`.label`, `.systemBackground`, `.secondaryLabel`).
@@ -66,13 +66,13 @@ pattern for sample apps and internal design systems.
 | Tool | Version |
 | --- | --- |
 | Xcode | 26.6 (stable; GitHub `macos-26` default) |
-| Swift | 6.2 toolchain / Swift 6 language mode (`SWIFT_VERSION = 6.0`) |
+| Swift | 6 language mode on the Swift 6.3 toolchain (`SWIFT_VERSION = 6.0`) |
 | iOS deployment target | 26.0 |
 | Devices | iPhone and iPad (`TARGETED_DEVICE_FAMILY = 1,2`) |
 
-> **Why not Xcode 27 / iOS 27?** GitHub’s Xcode 27 images are still a public preview.
+> **Why not Xcode 27 / iOS 27 / Swift 6.4?** GitHub’s Xcode 27 images are still a public preview.
 > This repo stays on the newest **stable** toolchain and SDK that `macos-26` runners ship
-> (Xcode 26.6 + iOS 26.x).
+> (Xcode 26.6 / Swift 6.3 + iOS 26.x).
 
 ## Getting started
 
@@ -159,7 +159,8 @@ swift format lint --recursive --strict LabelProgrammatically ButtonProgrammatica
 ```
 
 App targets use Xcode file-system synchronized groups, so Swift files added under a target
-folder are picked up automatically.
+folder are picked up automatically. Projects build in the Swift 6 language mode
+(`SWIFT_VERSION = 6.0`) on the Swift 6.3 toolchain that ships with Xcode 26.6.
 
 ## Roadmap
 
