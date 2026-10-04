@@ -6,8 +6,8 @@
 import XCTest
 @testable import ComponentsCatalog
 
-@MainActor
 final class CatalogInsetLabelTests: XCTestCase {
+    @MainActor
     func testIntrinsicContentSizeIncludesInsets() {
         let label = CatalogInsetLabel()
         label.text = "Hi"
