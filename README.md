@@ -46,7 +46,7 @@ pattern for sample apps and internal design systems.
 | Project | What it demonstrates |
 | --- | --- |
 | [`ComponentsCatalog`](ComponentsCatalog) | Searchable component index, navigation stack, haptics, and seven focused UIKit demos in one app. |
-| [`LabelProgrammatically`](LabelProgrammatically) | `UILabel` styling, multiline text, `AttributedString`, Dynamic Type, and a reusable `InsetLabel` with directional padding. |
+| [`LabelProgrammatically`](LabelProgrammatically) | `UILabel` styling, multiline text, UIKit `NSAttributedString`, Dynamic Type, and a reusable `InsetLabel` with directional padding. |
 | [`ButtonProgrammatically`](ButtonProgrammatically) | `UIButton.Configuration`, `UIAction`, async work with configuration updates, `UIMenu` accent picking, and light haptic feedback. |
 
 ### Catalog demos (inside `ComponentsCatalog`)
