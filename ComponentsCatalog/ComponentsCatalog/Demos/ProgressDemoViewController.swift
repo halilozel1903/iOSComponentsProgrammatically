@@ -9,7 +9,7 @@ final class ProgressDemoViewController: UIViewController {
     private var progressTask: Task<Void, Never>?
 
     private let progressView: UIProgressView = {
-        let view = UIProgressView(progressViewStyle: .bar)
+        let view = UIProgressView(style: .bar)
         view.progressTintColor = .systemIndigo
         view.trackTintColor = .tertiarySystemFill
         view.progress = 0
