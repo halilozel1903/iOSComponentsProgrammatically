@@ -43,7 +43,7 @@ final class LabelViewController: UIViewController {
         label.numberOfLines = 0
         label.textAlignment = .center
         label.lineBreakMode = .byWordWrapping
-        label.attributedText = NSAttributedString(LabelViewController.makeBodyText())
+        label.attributedText = LabelViewController.makeBodyText()
         label.accessibilityLabel = "Description of programmatic label setup"
         return label
     }()
@@ -82,19 +82,31 @@ final class LabelViewController: UIViewController {
         ])
     }
 
-    /// `AttributedString` keeps rich text styling type safe instead of relying on
-    /// stringly typed `NSAttributedString.Key` dictionaries.
-    private static func makeBodyText() -> AttributedString {
-        var text = AttributedString("Every label on this screen is created, styled and laid out programmatically.")
-        text.font = UIFont.preferredFont(forTextStyle: .body)
-        text.foregroundColor = UIColor.secondaryLabel
+    /// Builds rich text with UIKit `NSAttributedString` keys so a pure UIKit
+    /// target does not pull SwiftUI `AttributeScopes` (e.g. underline).
+    private static func makeBodyText() -> NSAttributedString {
+        let fullText = "Every label on this screen is created, styled and laid out programmatically."
+        let body = NSMutableAttributedString(
+            string: fullText,
+            attributes: [
+                .font: UIFont.preferredFont(forTextStyle: .body),
+                .foregroundColor: UIColor.secondaryLabel
+            ]
+        )
 
-        if let range = text.range(of: "programmatically") {
-            text[range].font = UIFont.preferredFont(forTextStyle: .headline)
-            text[range].foregroundColor = UIColor.systemIndigo
-            text[range].underlineStyle = .single
+        let highlight = "programmatically"
+        if let range = fullText.range(of: highlight) {
+            let nsRange = NSRange(range, in: fullText)
+            body.addAttributes(
+                [
+                    .font: UIFont.preferredFont(forTextStyle: .headline),
+                    .foregroundColor: UIColor.systemIndigo,
+                    .underlineStyle: NSUnderlineStyle.single.rawValue
+                ],
+                range: nsRange
+            )
         }
 
-        return text
+        return body
     }
 }

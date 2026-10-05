@@ -6,9 +6,9 @@
 </p>
 
 <p align="center">
-  <a href="#requirements"><img alt="Swift" src="https://img.shields.io/badge/Swift-6.0-F05138?logo=swift&logoColor=white"></a>
-  <a href="#requirements"><img alt="Xcode" src="https://img.shields.io/badge/Xcode-26-1575F9?logo=xcode&logoColor=white"></a>
-  <a href="#requirements"><img alt="Platform" src="https://img.shields.io/badge/iOS-18.0%2B-000000?logo=apple&logoColor=white"></a>
+  <a href="#requirements"><img alt="Swift" src="https://img.shields.io/badge/Swift-6.3-F05138?logo=swift&logoColor=white"></a>
+  <a href="#requirements"><img alt="Xcode" src="https://img.shields.io/badge/Xcode-26.6-1575F9?logo=xcode&logoColor=white"></a>
+  <a href="#requirements"><img alt="Platform" src="https://img.shields.io/badge/iOS-26.0%2B-000000?logo=apple&logoColor=white"></a>
   <a href="#project-structure"><img alt="UI" src="https://img.shields.io/badge/UI-UIKit%20(programmatic)-2396F3"></a>
   <a href=".github/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/halilozel1903/ioscomponentsprogrammatically/ci.yml?branch=master&label=CI&logo=githubactions&logoColor=white"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/License-MIT-green"></a>
@@ -31,7 +31,7 @@ pattern for sample apps and internal design systems.
 
 - **Programmatic UI only** — launch screens and scene manifests come from build settings; view
   controllers own the full hierarchy.
-- **Swift 6 language mode** — strict concurrency with default `MainActor` isolation for UI code.
+- **Swift 6 language mode** — Swift 6.3 toolchain (Xcode 26.6) with strict concurrency and default `MainActor` isolation for UI code.
 - **Accessibility & Dynamic Type** — preferred fonts, adjustable metrics, VoiceOver labels and
   hints on interactive controls.
 - **Dark Mode** — semantic `UIColor` tokens (`.label`, `.systemBackground`, `.secondaryLabel`).
@@ -46,7 +46,7 @@ pattern for sample apps and internal design systems.
 | Project | What it demonstrates |
 | --- | --- |
 | [`ComponentsCatalog`](ComponentsCatalog) | Searchable component index, navigation stack, haptics, and seven focused UIKit demos in one app. |
-| [`LabelProgrammatically`](LabelProgrammatically) | `UILabel` styling, multiline text, `AttributedString`, Dynamic Type, and a reusable `InsetLabel` with directional padding. |
+| [`LabelProgrammatically`](LabelProgrammatically) | `UILabel` styling, multiline text, UIKit `NSAttributedString`, Dynamic Type, and a reusable `InsetLabel` with directional padding. |
 | [`ButtonProgrammatically`](ButtonProgrammatically) | `UIButton.Configuration`, `UIAction`, async work with configuration updates, `UIMenu` accent picking, and light haptic feedback. |
 
 ### Catalog demos (inside `ComponentsCatalog`)
@@ -65,10 +65,14 @@ pattern for sample apps and internal design systems.
 
 | Tool | Version |
 | --- | --- |
-| Xcode | 26 or newer |
-| Swift | 6.0 (Swift 6 language mode) |
-| iOS deployment target | 18.0 |
+| Xcode | 26.6 (stable; GitHub `macos-26` default) |
+| Swift | 6 language mode on the Swift 6.3 toolchain (`SWIFT_VERSION = 6.0`) |
+| iOS deployment target | 26.0 |
 | Devices | iPhone and iPad (`TARGETED_DEVICE_FAMILY = 1,2`) |
+
+> **Why not Xcode 27 / iOS 27 / Swift 6.4?** GitHub’s Xcode 27 images are still a public preview.
+> This repo stays on the newest **stable** toolchain and SDK that `macos-26` runners ship
+> (Xcode 26.6 / Swift 6.3 + iOS 26.x).
 
 ## Getting started
 
@@ -119,7 +123,7 @@ xcodebuild build-for-testing \
 xcodebuild test \
   -project ComponentsCatalog/ComponentsCatalog.xcodeproj \
   -scheme ComponentsCatalog \
-  -destination 'platform=iOS Simulator,name=iPhone 16' \
+  -destination 'platform=iOS Simulator,name=iPhone 17' \
   CODE_SIGNING_ALLOWED=NO
 ```
 
@@ -155,7 +159,8 @@ swift format lint --recursive --strict LabelProgrammatically ButtonProgrammatica
 ```
 
 App targets use Xcode file-system synchronized groups, so Swift files added under a target
-folder are picked up automatically.
+folder are picked up automatically. Projects build in the Swift 6 language mode
+(`SWIFT_VERSION = 6.0`) on the Swift 6.3 toolchain that ships with Xcode 26.6.
 
 ## Roadmap
 
