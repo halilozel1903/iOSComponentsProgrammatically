@@ -92,16 +92,116 @@ open LabelProgrammatically/LabelProgrammatically.xcodeproj
 open ButtonProgrammatically/ButtonProgrammatically.xcodeproj
 ```
 
-Select an iOS simulator and press <kbd>⌘</kbd> + <kbd>R</kbd>.
+Select an iOS 26 simulator and press <kbd>⌘</kbd> + <kbd>R</kbd>.
 
 > Tip: start with **ComponentsCatalog** to browse every demo from one entry point.
 
-### Building from the command line
+## Build, test, and run (CLI)
 
-Shared schemes allow simulator builds without opening Xcode:
+All three apps ship shared schemes. Commands below assume **Xcode 26.6** (Swift 6.3 toolchain)
+and an **iOS 26** simulator. On CI, GitHub Actions builds with
+`-destination 'generic/platform=iOS Simulator'` because hosted runners often lack booted
+simulator runtimes; locally you can target a concrete device.
+
+Optional helper to pick the newest available iPhone on an iOS 26 runtime:
 
 ```bash
-for example in ComponentsCatalog LabelProgrammatically ButtonProgrammatically; do
+udid=$(xcrun simctl list devices available --json | jq -r '
+  [.devices | to_entries[] | select(.key | test("iOS-26")) | .value[]
+   | select(.name | test("iPhone"))] | last | .udid')
+echo "$udid"
+```
+
+### LabelProgrammatically
+
+```bash
+# Build
+xcodebuild build \
+  -project LabelProgrammatically/LabelProgrammatically.xcodeproj \
+  -scheme LabelProgrammatically \
+  -destination "id=${udid}" \
+  CODE_SIGNING_ALLOWED=NO
+
+# Run on the booted simulator (build first, then launch the .app)
+xcodebuild build \
+  -project LabelProgrammatically/LabelProgrammatically.xcodeproj \
+  -scheme LabelProgrammatically \
+  -destination "id=${udid}" \
+  -derivedDataPath build/LabelProgrammatically \
+  CODE_SIGNING_ALLOWED=NO
+
+xcrun simctl boot "$udid" 2>/dev/null || true
+xcrun simctl install "$udid" \
+  build/LabelProgrammatically/Build/Products/Debug-iphonesimulator/LabelProgrammatically.app
+xcrun simctl launch "$udid" com.halil.ozel.LabelProgrammatically
+```
+
+### ButtonProgrammatically
+
+```bash
+# Build
+xcodebuild build \
+  -project ButtonProgrammatically/ButtonProgrammatically.xcodeproj \
+  -scheme ButtonProgrammatically \
+  -destination "id=${udid}" \
+  CODE_SIGNING_ALLOWED=NO
+
+# Run
+xcodebuild build \
+  -project ButtonProgrammatically/ButtonProgrammatically.xcodeproj \
+  -scheme ButtonProgrammatically \
+  -destination "id=${udid}" \
+  -derivedDataPath build/ButtonProgrammatically \
+  CODE_SIGNING_ALLOWED=NO
+
+xcrun simctl boot "$udid" 2>/dev/null || true
+xcrun simctl install "$udid" \
+  build/ButtonProgrammatically/Build/Products/Debug-iphonesimulator/ButtonProgrammatically.app
+xcrun simctl launch "$udid" com.halil.ozel.ButtonProgrammatically
+```
+
+### ComponentsCatalog
+
+```bash
+# Build
+xcodebuild build \
+  -project ComponentsCatalog/ComponentsCatalog.xcodeproj \
+  -scheme ComponentsCatalog \
+  -destination "id=${udid}" \
+  CODE_SIGNING_ALLOWED=NO
+
+# Run
+xcodebuild build \
+  -project ComponentsCatalog/ComponentsCatalog.xcodeproj \
+  -scheme ComponentsCatalog \
+  -destination "id=${udid}" \
+  -derivedDataPath build/ComponentsCatalog \
+  CODE_SIGNING_ALLOWED=NO
+
+xcrun simctl boot "$udid" 2>/dev/null || true
+xcrun simctl install "$udid" \
+  build/ComponentsCatalog/Build/Products/Debug-iphonesimulator/ComponentsCatalog.app
+xcrun simctl launch "$udid" com.halil.ozel.ComponentsCatalog
+
+# Test (execute on a Mac with simulator runtimes installed)
+xcodebuild test \
+  -project ComponentsCatalog/ComponentsCatalog.xcodeproj \
+  -scheme ComponentsCatalog \
+  -destination "id=${udid}" \
+  CODE_SIGNING_ALLOWED=NO
+
+# CI-equivalent compile of the test target without running the simulator
+xcodebuild build-for-testing \
+  -project ComponentsCatalog/ComponentsCatalog.xcodeproj \
+  -scheme ComponentsCatalog \
+  -destination 'generic/platform=iOS Simulator' \
+  CODE_SIGNING_ALLOWED=NO
+```
+
+### Build every target (matrix-style)
+
+```bash
+for example in LabelProgrammatically ButtonProgrammatically ComponentsCatalog; do
   xcodebuild build \
     -project "$example/$example.xcodeproj" \
     -scheme "$example" \
@@ -110,29 +210,30 @@ for example in ComponentsCatalog LabelProgrammatically ButtonProgrammatically; d
 done
 ```
 
-Run catalog unit tests locally (GitHub Actions compiles the test target with `build-for-testing` because hosted runners do not ship iOS Simulator runtimes by default):
-
-```bash
-xcodebuild build-for-testing \
-  -project ComponentsCatalog/ComponentsCatalog.xcodeproj \
-  -scheme ComponentsCatalog \
-  -destination 'generic/platform=iOS Simulator' \
-  CODE_SIGNING_ALLOWED=NO
-
-# On a Mac with simulators installed, execute tests with:
-xcodebuild test \
-  -project ComponentsCatalog/ComponentsCatalog.xcodeproj \
-  -scheme ComponentsCatalog \
-  -destination 'platform=iOS Simulator,name=iPhone 17' \
-  CODE_SIGNING_ALLOWED=NO
-```
-
 ### Linting and formatting
 
 ```bash
-swiftlint lint
+swiftlint lint --strict
 
-swift format lint --recursive --strict LabelProgrammatically ButtonProgrammatically ComponentsCatalog
+swift format lint --recursive --strict \
+  LabelProgrammatically ButtonProgrammatically ComponentsCatalog
+```
+
+## Screenshots
+
+Simulator captures are not checked into the repository yet (this environment has no
+macOS / Xcode runtime for real device screenshots). After running each app locally, save
+PNGs under [`docs/screenshots/`](docs/screenshots/) and link them here, for example:
+
+| Suggested file | App / screen |
+| --- | --- |
+| `docs/screenshots/catalog-index.png` | ComponentsCatalog — searchable UIKit Catalog index |
+| `docs/screenshots/label-demo.png` | LabelProgrammatically — headline, badge, attributed body |
+| `docs/screenshots/button-demo.png` | ButtonProgrammatically — configuration + accent menu |
+
+```bash
+# Example: capture the booted simulator after launching an app
+xcrun simctl io booted screenshot docs/screenshots/catalog-index.png
 ```
 
 ## Project structure
@@ -153,6 +254,7 @@ swift format lint --recursive --strict LabelProgrammatically ButtonProgrammatica
 ├── LabelProgrammatically/
 │   ├── LabelProgrammatically.xcodeproj
 │   └── LabelProgrammatically/
+├── docs/screenshots/                      # Drop real simulator PNGs here
 ├── .github/workflows/ci.yml
 ├── .swiftlint.yml
 └── .swift-format
@@ -167,6 +269,7 @@ folder are picked up automatically. Projects build in the Swift 6 language mode
 - [ ] `UITextView` and `UISearchBar` demos with compositional layout helpers
 - [ ] `UIControl` subclass example with custom configuration
 - [ ] Snapshot tests for catalog cells in light and dark appearance
+- [ ] Checked-in simulator screenshots for the README (`docs/screenshots/`)
 - [ ] SwiftUI preview-style hosting for selected UIKit demos (where useful for teaching)
 
 ## Contributing
