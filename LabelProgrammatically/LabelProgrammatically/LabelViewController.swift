@@ -2,7 +2,7 @@
 //  LabelViewController.swift
 //  LabelProgrammatically
 //
-//  Created by Halil Özel on 26.10.2018.
+//  Created by Halil Ozel on 26.10.2018.
 //
 
 import UIKit
