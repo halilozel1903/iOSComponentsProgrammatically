@@ -221,15 +221,19 @@ swift format lint --recursive --strict \
 
 ## Screenshots
 
-Simulator captures are not checked into the repository yet (this environment has no
-macOS / Xcode runtime for real device screenshots). After running each app locally, save
-PNGs under [`docs/screenshots/`](docs/screenshots/) and link them here, for example:
+Layout mocks that match the English UI of each sample (catalog index, label demo, button demo).
+These are SVG illustrations — Linux CI hosts cannot capture the iOS Simulator GUI. Replace them
+with real PNGs when you have a Mac; see [docs/screenshots/README.md](docs/screenshots/README.md).
 
-| Suggested file | App / screen |
-| --- | --- |
-| `docs/screenshots/catalog-index.png` | ComponentsCatalog — searchable UIKit Catalog index |
-| `docs/screenshots/label-demo.png` | LabelProgrammatically — headline, badge, attributed body |
-| `docs/screenshots/button-demo.png` | ButtonProgrammatically — configuration + accent menu |
+| ComponentsCatalog | LabelProgrammatically | ButtonProgrammatically |
+| --- | --- | --- |
+| ![Catalog index](docs/screenshots/catalog-index.svg) | ![Label demo](docs/screenshots/label-demo.svg) | ![Button demo](docs/screenshots/button-demo.svg) |
+
+**Expected PNG paths** (optional, after a simulator capture):
+
+- `docs/screenshots/catalog-index.png`
+- `docs/screenshots/label-demo.png`
+- `docs/screenshots/button-demo.png`
 
 ```bash
 # Example: capture the booted simulator after launching an app
@@ -269,7 +273,8 @@ folder are picked up automatically. Projects build in the Swift 6 language mode
 - [ ] `UITextView` and `UISearchBar` demos with compositional layout helpers
 - [ ] `UIControl` subclass example with custom configuration
 - [ ] Snapshot tests for catalog cells in light and dark appearance
-- [ ] Checked-in simulator screenshots for the README (`docs/screenshots/`)
+- [x] SVG layout mocks for the README (`docs/screenshots/`)
+- [ ] Replace SVG mocks with real simulator PNG captures
 - [ ] SwiftUI preview-style hosting for selected UIKit demos (where useful for teaching)
 
 ## Contributing
