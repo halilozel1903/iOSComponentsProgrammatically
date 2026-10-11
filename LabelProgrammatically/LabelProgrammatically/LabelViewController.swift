@@ -76,7 +76,7 @@ final class LabelViewController: UIViewController {
             contentStackView.leadingAnchor.constraint(greaterThanOrEqualTo: layoutGuide.leadingAnchor, constant: 24),
             contentStackView.trailingAnchor.constraint(lessThanOrEqualTo: layoutGuide.trailingAnchor, constant: -24),
             readableWidth,
-            // The stack is centre aligned, so the wrapping labels need an explicit width.
+            // The stack is center aligned, so the wrapping labels need an explicit width.
             headlineLabel.widthAnchor.constraint(equalTo: contentStackView.widthAnchor),
             bodyLabel.widthAnchor.constraint(equalTo: contentStackView.widthAnchor)
         ])
