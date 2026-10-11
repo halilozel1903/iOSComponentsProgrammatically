@@ -285,6 +285,7 @@ Contributions are welcome. Please:
 2. Ensure simulator builds succeed without new warnings.
 3. Run `swiftlint lint` and `swift format lint --recursive --strict …` on touched folders.
 4. Use small, conventional commits (`feat:`, `fix:`, `test:`, `docs:`, `chore:`).
+5. Keep **all** user-facing strings, comments, docs, logs, and commit messages in **English**.
 
 New component examples should follow the existing layout: one Xcode project per focused sample,
 or an additional screen inside `ComponentsCatalog` with accessibility labels and Dynamic Type.
