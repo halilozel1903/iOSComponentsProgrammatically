@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  ButtonProgrammatically
 //
-//  Created by Halil Özel on 16.11.2018.
+//  Created by Halil Ozel on 16.11.2018.
 //
 
 import UIKit
